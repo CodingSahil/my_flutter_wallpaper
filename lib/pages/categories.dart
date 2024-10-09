@@ -96,7 +96,7 @@ class _CategoriesState extends State<Categories> {
              child: Stack(children: [
                ClipRRect(
                    borderRadius: BorderRadius.circular(20),
-                   child: Image.asset("images/marvel.jpeg",width: MediaQuery.of(context).size.width,height: 180,fit: BoxFit.cover,)),
+                   child: Image.asset("images/marvel.jpg",width: MediaQuery.of(context).size.width,height: 180,fit: BoxFit.cover,)),
                Container(
                  width: MediaQuery.of(context).size.width,
                  height: 180,

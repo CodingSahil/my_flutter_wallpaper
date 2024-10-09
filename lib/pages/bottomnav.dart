@@ -1,8 +1,8 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:my_flutter_wallpaper/pages/categories.dart';
 import 'package:my_flutter_wallpaper/pages/home.dart';
 import 'package:my_flutter_wallpaper/pages/search.dart';
+import 'package:my_flutter_wallpaper/pages/favorite.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 class BottomNav extends StatefulWidget {
   const BottomNav({super.key});
@@ -17,6 +17,7 @@ class _BottomNavState extends State<BottomNav> {
   late Home home;
   late Categories categories;
   late Search search;
+ // late Favorite favorite;
   late Widget currentPage;
 
   @override
@@ -39,7 +40,10 @@ class _BottomNavState extends State<BottomNav> {
         color: Color.fromARGB(255, 84, 87, 93),
         animationDuration: Duration(milliseconds: 500),
         onTap: (int index){
+          setState(() {
             currentTabIndex=index;
+          });
+
         },
         items: [
         Icon(
@@ -48,6 +52,7 @@ class _BottomNavState extends State<BottomNav> {
         ),
         Icon(Icons.search_outlined, color: Colors.white,),
         Icon(Icons.category, color: Colors.white,)
+        // Icon(Icons.favorite, color: Colors.white,)
         ]),
       body: pages[currentTabIndex],
     );

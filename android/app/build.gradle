@@ -23,6 +23,8 @@ if (flutterVersionName == null) {
     flutterVersionName = "1.0"
 }
 
+apply plugins: 'com.google.gms.google-services'
+
 android {
     namespace = "com.example.my_flutter_wallpaper"
     compileSdk = flutter.compileSdkVersion
@@ -55,4 +57,9 @@ android {
 
 flutter {
     source = "../.."
+}
+
+dependencies{
+    implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
+    implementation("com.google.firebase:firebase-analytics")
 }

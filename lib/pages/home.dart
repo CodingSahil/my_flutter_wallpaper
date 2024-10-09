@@ -36,7 +36,7 @@ int activeIndex=0;
 
             ),
             SizedBox(width: 80.0,),
-            Text("Wallify",style: TextStyle(color: Colors.black, fontSize: 25.0, fontWeight: FontWeight.bold,fontFamily: 'Poppins'))
+            Text("WallWonders",style: TextStyle(color: Colors.black, fontSize: 25.0, fontWeight: FontWeight.bold,fontFamily: 'Poppins'))
 
           ],
         ),

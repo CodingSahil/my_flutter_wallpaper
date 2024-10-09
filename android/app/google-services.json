@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "297625398371",
+    "project_id": "wallwonders-ff7c7",
+    "storage_bucket": "wallwonders-ff7c7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:297625398371:android:0dea58691f867e85c99c56",
+        "android_client_info": {
+          "package_name": "com.example.my_flutter_wallpaper"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8f2_7ToqO47SUI6GNLoVkA0Gv8y4zcxE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
