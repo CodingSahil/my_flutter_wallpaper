@@ -30,11 +30,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  carousel_slider: ^4.2.1
+  carousel_slider: ^5.0.0
   smooth_page_indicator: ^1.1.0
   curved_navigation_bar: ^1.0.6
   http: ^0.13.5
-  image_gallery_saver: ^2.0.3
+#  image_gallery_saver: ^2.0.3
   dio: ^5.7.0
   cached_network_image: ^3.3.1
 

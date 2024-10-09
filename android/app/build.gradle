@@ -23,8 +23,6 @@ if (flutterVersionName == null) {
     flutterVersionName = "1.0"
 }
 
-apply plugins: 'com.google.gms.google-services'
-
 android {
     namespace = "com.example.my_flutter_wallpaper"
     compileSdk = flutter.compileSdkVersion
@@ -33,6 +31,10 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8
     }
 
     defaultConfig {
@@ -62,4 +64,5 @@ flutter {
 dependencies{
     implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
     implementation("com.google.firebase:firebase-analytics")
+
 }

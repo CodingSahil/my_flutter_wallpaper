@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
+// import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:my_flutter_wallpaper/widget/widget.dart';
 class FullScreen extends StatefulWidget {
   String imaagepath;
@@ -37,7 +37,7 @@ class _FullScreenState extends State<FullScreen> {
                 children: [
                   GestureDetector(
                     onTap: (){
-                      _save();
+                      // _save();
                     },
                   ),
                   Container(
@@ -87,4 +87,4 @@ class _FullScreenState extends State<FullScreen> {
 //        await ImageGallerySaver.saveImage(Uint8List.fromList(response.data));
 //    print(result);
 //    Navigator.pop(context);
-}
+// }
