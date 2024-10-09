@@ -1,90 +1,177 @@
+import 'dart:developer';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:share_plus/share_plus.dart';
+
 // import 'package:image_gallery_saver/image_gallery_saver.dart';
-import 'package:my_flutter_wallpaper/widget/widget.dart';
+
 class FullScreen extends StatefulWidget {
-  String imaagepath;
-  FullScreen({required this.imaagepath});
+  final String imaagepath;
+  final bool isInWishlist;
+
+  FullScreen({
+    required this.imaagepath,
+    this.isInWishlist = false,
+  });
 
   @override
   State<FullScreen> createState() => _FullScreenState();
-
 }
 
 class _FullScreenState extends State<FullScreen> {
+  bool isFavourite = false;
+
+  @override
+  void initState() {
+    isFavourite = widget.isInWishlist;
+    super.initState();
+  }
+
+
+  // void _save({
+  //   required String path,
+  // }) async {
+  //   var response = await Dio().get(
+  //     path,
+  //     options: Options(
+  //       responseType: ResponseType.bytes,
+  //     ),
+  //   );
+  //   final result = await ImageGallerySaver.saveImage(
+  //     Uint8List.fromList(
+  //       response.data,
+  //     ),
+  //   );
+  //   print(result);
+  //   Navigator.pop(context);
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
-          Hero(tag: widget.imaagepath, child: Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            child: CachedNetworkImage(imageUrl: widget.imaagepath,fit: BoxFit.cover ,),
-          )),
-          Container(
-            margin: EdgeInsets.only(bottom:  50.0),
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            alignment: Alignment.bottomCenter,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-              Stack(
-                children: [
-                  GestureDetector(
-                    onTap: (){
-                      // _save();
-                    },
+          Column(
+            children: [
+              Expanded(
+                child: Hero(
+                  tag: widget.imaagepath,
+                  child: CachedNetworkImage(
+                    imageUrl: widget.imaagepath,
+                    fit: BoxFit.cover,
                   ),
-                  Container(
-                    height: 90,
-                    width: MediaQuery.of(context). size.width/2,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.white54,width: 2),
-                      borderRadius: BorderRadius.circular(30),
-                      gradient: LinearGradient(
-                          colors: [Color(0x36ffffff),Color(0x0ffffff)])),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
+                height: MediaQuery.of(context).size.height * 0.06,
+                width: MediaQuery.of(context).size.width,
+                alignment: Alignment.bottomCenter,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: GestureDetector(
+                        behavior: HitTestBehavior.translucent,
+                        onTap: () async{
+                          // Directory appDocDir = await getApplicationDocumentsDirectory();
+                          // String appDocPath = appDocDir.path;
+                          // final defaultCacheManager = DefaultCacheManager();
+                          // defaultCacheManager.
+                          // var dummyFile = await CacheInstance.instance
+                          //     .getSingleFile(element.toString());
+//                           final result = await Share.shareXFiles([XFile('${widget.imaagepath}')], text: 'Great picture');
+// log('message');
+//                           if (result.status == ShareResultStatus.success) {
+//                             print('Thank you for sharing the picture!');
+//                           }if (result.status == ShareResultStatus.unavailable) {
+//                             print('Thank you for unavailableds the picture!');
+//                           }
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(
+                              14,
+                            ),
+                            color: Color.fromARGB(255, 84, 87, 93),
+                          ),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text("Set Wallpaper",style: TextStyle(fontSize: 16.0,color: Colors.white,fontFamily: 'Poppins'),),
-                              Text("Image Will Be saved in a gallery",style: TextStyle( fontSize: 12.0,color: Colors.white),)
+                              Text(
+                                "Set Wallpaper",
+                                style: TextStyle(
+                                  fontSize: 14.0,
+                                  color: Colors.white,
+                                  fontFamily: 'Poppins',
+                                ),
+                              ),
                             ],
                           ),
-
+                        ),
+                      ),
                     ),
+                    SizedBox(width: 12),
+                    GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () {
+                        setState(() {
+                          isFavourite = !isFavourite;
+                        });
+                      },
+                      child: isFavourite
+                          ? Icon(
+                              Icons.favorite,
+                              color: Colors.red,
+                              size: 30,
+                            )
+                          : Icon(
+                              Icons.favorite_border,
+                              color: Color.fromARGB(255, 84, 87, 93),
+                              size: 30,
+                            ),
+                    ),
+                    SizedBox(width: 12),
+                    GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () {
 
-                ],
+                      },
+                      child: Icon(
+                              Icons.share,
+                              color: Color.fromARGB(255, 84, 87, 93),
+                              size: 25,
+                            ),
+                    ),
+                    SizedBox(width: 5),
+                  ],
+                ),
               ),
-                SizedBox(
-                  height: 20.0,
-                ),
-                GestureDetector(
-                  onTap: (){
-                    Navigator.pop(context);
-                  },
-                ),
-                Text("Cancel",style: TextStyle( fontSize: 20.0,color: Colors.white,fontWeight: FontWeight.bold,fontFamily: 'Poppins'),
-                )
-
-              ],),
-          )
+            ],
+          ),
+          Positioned(
+            top: 40,
+            left: 20,
+            child: GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onTap: () {
+                Navigator.of(context).pop();
+              },
+              child: Icon(
+                Icons.arrow_back,
+                size: 25,
+                color: Colors.black,
+              ),
+            ),
+          ),
         ],
       ),
     );
-
   }
 }
 
-// _save() async{
-//    var response = await Dio().get(widget.imagepath,
-//    options: Options(responseType: ResponseType.bytes));
-//    final result =
-//        await ImageGallerySaver.saveImage(Uint8List.fromList(response.data));
-//    print(result);
-//    Navigator.pop(context);
-// }
