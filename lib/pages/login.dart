@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:my_flutter_wallpaper/pages/register.dart';
+import 'package:my_flutter_wallpaper/utils/routes/route.dart';
 
 import '../utils/colors.dart';
 
@@ -77,7 +78,12 @@ class _SignInPageState extends State<SignInPage> {
                         ),
                         const SizedBox(height: 16),
                         ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.popAndPushNamed(
+                              context,
+                              AppRoutes.home,
+                            );
+                          },
                           child: Text(
                             "Login".toUpperCase(),
                           ),
