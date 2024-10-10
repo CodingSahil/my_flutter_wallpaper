@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_flutter_wallpaper/pages/categories.dart';
 import 'package:my_flutter_wallpaper/pages/favorite.dart';
 import 'package:my_flutter_wallpaper/pages/home.dart';
+import 'package:my_flutter_wallpaper/pages/paid.dart';
 import 'package:my_flutter_wallpaper/pages/search.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
@@ -19,6 +20,7 @@ class _BottomNavState extends State<BottomNav> {
   late Categories categories;
   late Search search;
   late Widget favorite;
+  late Widget paidPage;
 
   // late Favorite favorite;
   late Widget currentPage;
@@ -28,11 +30,13 @@ class _BottomNavState extends State<BottomNav> {
     home = Home();
     search = Search();
     favorite= FavouritePage();
+    paidPage= PaidWallpaperPage();
     categories = Categories();
     pages = [
       home,
       search,
       favorite,
+      paidPage,
       categories,
     ];
     currentPage = Home();
@@ -64,6 +68,10 @@ class _BottomNavState extends State<BottomNav> {
           ),
           Icon(
             Icons.favorite,
+            color: Colors.white,
+          ),
+          Icon(
+            Icons.paid,
             color: Colors.white,
           ),
           Icon(

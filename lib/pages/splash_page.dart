@@ -18,7 +18,7 @@ class _SplashScreenState extends State<SplashScreen> {
       ),
       () => Navigator.popAndPushNamed(
         context,
-        AppRoutes.signIn,
+        AppRoutes.home,
       ),
     );
   }

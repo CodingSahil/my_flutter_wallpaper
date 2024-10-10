@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:my_flutter_wallpaper/pages/register.dart';
 
 import '../utils/colors.dart';
+
+const kPrimaryColor = Color(0xFF6F35A5);
 
 class SignInPage extends StatefulWidget {
   const SignInPage({Key? key});
@@ -16,46 +19,268 @@ class _SignInPageState extends State<SignInPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: Stack(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            const SizedBox(height: 64),
+            const Text(
+              "LOGIN",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 32),
+            Row(
+              children: [
+                const Spacer(),
+                Expanded(
+                  flex: 8,
+                  child: SvgPicture.asset('images/login.svg'),
+                ),
+                const Spacer(),
+              ],
+            ),
+            const SizedBox(height: 32),
+            Row(
+              children: [
+                Spacer(),
+                Expanded(
+                  flex: 8,
+                  child: Form(
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          keyboardType: TextInputType.emailAddress,
+                          textInputAction: TextInputAction.next,
+                          cursorColor: kPrimaryColor,
+                          onSaved: (email) {},
+                          decoration: const InputDecoration(
+                            hintText: "Your email",
+                            prefixIcon: Padding(
+                              padding: EdgeInsets.all(16),
+                              child: Icon(Icons.person),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          child: TextFormField(
+                            textInputAction: TextInputAction.done,
+                            obscureText: true,
+                            cursorColor: kPrimaryColor,
+                            decoration: const InputDecoration(
+                              hintText: "Your password",
+                              prefixIcon: Padding(
+                                padding: EdgeInsets.all(16),
+                                child: Icon(Icons.lock),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        ElevatedButton(
+                          onPressed: () {},
+                          child: Text(
+                            "Login".toUpperCase(),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        AlreadyHaveAnAccountCheck(
+                          press: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return const SignUpScreen();
+                                },
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Spacer(),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+    // return Scaffold(
+    //   backgroundColor: Colors.transparent,
+    //   body: Stack(
+    //     children: [
+    //       BackgroundWidget(),
+    //       Column(
+    //         children: [
+    //           SizedBox(
+    //             height: 300.h,
+    //           ),
+    //           Text("Sign In",
+    //               style: TextStyle(
+    //                   fontFamily: "mont",
+    //                   fontSize: 35,
+    //                   color: Colors.white,
+    //                   fontWeight: FontWeight.bold)),
+    //           Text("Lorem ipsum dolar sit amet",
+    //               style: TextStyle(
+    //                   fontFamily: "mont",
+    //                   fontSize: 20,
+    //                   color: pinkColor,
+    //                   fontWeight: FontWeight.bold)),
+    //           Padding(
+    //             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+    //             child: SignInBody(),
+    //           ),
+    //           Padding(
+    //             padding: EdgeInsets.symmetric(vertical: 20.h),
+    //             child: HaveAccountWidget(haveAccount: false),
+    //           )
+    //         ],
+    //       ),
+    //       Positioned(
+    //         left: 60.w,
+    //         right: 60.w,
+    //         top: 630.h,
+    //         child: CustomBtn(
+    //             text: "Sign In",
+    //             color: pinkColor,
+    //             onTap: () => Navigator.push(context,
+    //                 MaterialPageRoute(builder: (context) => NavigationPage()))),
+    //       ),
+    //     ],
+    //   ),
+    // );
+  }
+}
+
+class AlreadyHaveAnAccountCheck extends StatelessWidget {
+  final bool login;
+  final Function? press;
+
+  const AlreadyHaveAnAccountCheck({
+    Key? key,
+    this.login = true,
+    required this.press,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Text(
+          login ? "Don’t have an Account ? " : "Already have an Account ? ",
+          style: const TextStyle(color: kPrimaryColor),
+        ),
+        GestureDetector(
+          onTap: press as void Function()?,
+          child: Text(
+            login ? "Sign Up" : "Sign In",
+            style: const TextStyle(
+              color: kPrimaryColor,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        )
+      ],
+    );
+  }
+}
+
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({super.key});
+
+  @override
+  State<SignUpScreen> createState() => _SignUpScreenState();
+}
+
+class _SignUpScreenState extends State<SignUpScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Column(
         children: [
-          BackgroundWidget(),
-          Column(
+          const SizedBox(height: 64),
+          Text(
+            "Sign Up".toUpperCase(),
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 32),
+          Row(
             children: [
-              SizedBox(
-                height: 300.h,
+              const Spacer(),
+              Expanded(
+                flex: 8,
+                child: SvgPicture.asset(
+                  'images/signup.svg',
+                ),
               ),
-              Text("Sign In",
-                  style: TextStyle(
-                      fontFamily: "mont",
-                      fontSize: 35,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold)),
-              Text("Lorem ipsum dolar sit amet",
-                  style: TextStyle(
-                      fontFamily: "mont",
-                      fontSize: 20,
-                      color: pinkColor,
-                      fontWeight: FontWeight.bold)),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
-                child: SignInBody(),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 20.h),
-                child: HaveAccountWidget(haveAccount: false),
-              )
+              const Spacer(),
             ],
           ),
-          Positioned(
-            left: 60.w,
-            right: 60.w,
-            top: 630.h,
-            child: CustomBtn(
-                text: "Sign In",
-                color: pinkColor,
-                onTap: () => Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => NavigationPage()))),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Spacer(),
+              Expanded(
+                flex: 8,
+                child: Form(
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        keyboardType: TextInputType.emailAddress,
+                        textInputAction: TextInputAction.next,
+                        cursorColor: kPrimaryColor,
+                        onSaved: (email) {},
+                        decoration: const InputDecoration(
+                          hintText: "Your email",
+                          prefixIcon: Padding(
+                            padding: EdgeInsets.all(16),
+                            child: Icon(Icons.person),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        child: TextFormField(
+                          textInputAction: TextInputAction.done,
+                          obscureText: true,
+                          cursorColor: kPrimaryColor,
+                          decoration: const InputDecoration(
+                            hintText: "Your password",
+                            prefixIcon: Padding(
+                              padding: EdgeInsets.all(16),
+                              child: Icon(Icons.lock),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16 / 2),
+                      ElevatedButton(
+                        onPressed: () {},
+                        child: Text("Sign Up".toUpperCase()),
+                      ),
+                      const SizedBox(height: 16),
+                      AlreadyHaveAnAccountCheck(
+                        login: false,
+                        press: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return const SignInPage();
+                              },
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Spacer(),
+            ],
           ),
         ],
       ),

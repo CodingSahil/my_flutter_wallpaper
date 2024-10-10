@@ -1,10 +1,9 @@
 import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -25,13 +24,22 @@ class FullScreen extends StatefulWidget {
 
 class _FullScreenState extends State<FullScreen> {
   bool isFavourite = false;
+  bool loader = false;
+  late final DefaultCacheManager defaultCacheManager;
+  File? file;
 
   @override
   void initState() {
     isFavourite = widget.isInWishlist;
+    defaultCacheManager = DefaultCacheManager();
     super.initState();
   }
 
+  @override
+  void dispose() {
+    defaultCacheManager.emptyCache();
+    super.dispose();
+  }
 
   // void _save({
   //   required String path,
@@ -78,20 +86,25 @@ class _FullScreenState extends State<FullScreen> {
                     Expanded(
                       child: GestureDetector(
                         behavior: HitTestBehavior.translucent,
-                        onTap: () async{
-                          // Directory appDocDir = await getApplicationDocumentsDirectory();
-                          // String appDocPath = appDocDir.path;
-                          // final defaultCacheManager = DefaultCacheManager();
-                          // defaultCacheManager.
-                          // var dummyFile = await CacheInstance.instance
-                          //     .getSingleFile(element.toString());
-//                           final result = await Share.shareXFiles([XFile('${widget.imaagepath}')], text: 'Great picture');
-// log('message');
-//                           if (result.status == ShareResultStatus.success) {
-//                             print('Thank you for sharing the picture!');
-//                           }if (result.status == ShareResultStatus.unavailable) {
-//                             print('Thank you for unavailableds the picture!');
-//                           }
+                        onTap: () async {
+                          setState(() {
+                            loader = true;
+                          });
+                          var dummyFile =
+                              await defaultCacheManager.downloadFile(
+                            widget.imaagepath.toString(),
+                          );
+                          file = await defaultCacheManager.putFile(
+                            dummyFile.originalUrl,
+                            Uint8List(
+                              dummyFile.file.lengthSync(),
+                            ),
+                          );
+                          log(file?.path.toString() ?? '', name: 'path => ');
+                          setState(() {
+                            loader = false;
+                          });
+                          return;
                         },
                         child: Container(
                           decoration: BoxDecoration(
@@ -103,14 +116,24 @@ class _FullScreenState extends State<FullScreen> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text(
-                                "Set Wallpaper",
-                                style: TextStyle(
-                                  fontSize: 14.0,
-                                  color: Colors.white,
-                                  fontFamily: 'Poppins',
+                              if (loader)
+                                SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                    strokeWidth: 1.5,
+                                  ),
+                                )
+                              else
+                                Text(
+                                  "Set Wallpaper",
+                                  style: TextStyle(
+                                    fontSize: 14.0,
+                                    color: Colors.white,
+                                    fontFamily: 'Poppins',
+                                  ),
                                 ),
-                              ),
                             ],
                           ),
                         ),
@@ -139,14 +162,33 @@ class _FullScreenState extends State<FullScreen> {
                     SizedBox(width: 12),
                     GestureDetector(
                       behavior: HitTestBehavior.translucent,
-                      onTap: () {
+                      onTap: () async {
+                        File file = await defaultCacheManager
+                            .getSingleFile(widget.imaagepath);
+                        final result = await Share.shareXFiles([
+                          XFile(
+                            file.path,
+                          ),
+                        ], text: 'Great picture');
+                        log('message');
+                        if (result.status == ShareResultStatus.success) {
+                          print('Thank you for sharing the picture!');
+                        }
+                        if (result.status == ShareResultStatus.unavailable) {
+                          print('Thank you for unavailable the picture!');
+                        }
 
+                        defaultCacheManager.removeFile(
+                          file.path,
+                        );
+                        defaultCacheManager.emptyCache();
+                        log('File Removed');
                       },
                       child: Icon(
-                              Icons.share,
-                              color: Color.fromARGB(255, 84, 87, 93),
-                              size: 25,
-                            ),
+                        Icons.share,
+                        color: Color.fromARGB(255, 84, 87, 93),
+                        size: 25,
+                      ),
                     ),
                     SizedBox(width: 5),
                   ],
@@ -174,4 +216,3 @@ class _FullScreenState extends State<FullScreen> {
     );
   }
 }
-
