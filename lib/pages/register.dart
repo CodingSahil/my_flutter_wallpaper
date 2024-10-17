@@ -30,7 +30,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     SizedBox(
                       height: 100.h,
                     ),
-                    Text("Sign Up",
+                    Text("Register",
                         style: TextStyle(
                             fontFamily: "mont",
                             fontSize: 35,

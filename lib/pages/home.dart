@@ -2,7 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+
+import 'login.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -28,6 +31,7 @@ class _HomeState extends State<Home> {
         child: Column(
           children: [
             Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Material(
                   elevation: 5.0,
@@ -43,7 +47,7 @@ class _HomeState extends State<Home> {
                   ),
                 ),
                 SizedBox(
-                  width: 80.0,
+                  width: 60.0,
                 ),
                 Text(
                   "WallWonders",
@@ -54,6 +58,15 @@ class _HomeState extends State<Home> {
                     fontFamily: 'Poppins',
                   ),
                 ),
+                SizedBox(
+                  width: 40.0,
+                ),
+                IconButton(
+                  onPressed: () {
+                    Get.offAll(SignInPage());
+                  },
+                  icon: Icon(Icons.logout_rounded),
+                )
               ],
             ),
             SizedBox(

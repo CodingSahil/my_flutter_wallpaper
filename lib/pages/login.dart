@@ -2,9 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:my_flutter_wallpaper/Admin/admin_home.dart';
 import 'package:my_flutter_wallpaper/pages/register.dart';
 
 import '../utils/colors.dart';
+import '../utils/routes/route.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 const kPrimaryColor = Color(0xFF6F35A5);
 
@@ -16,10 +21,63 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
+  Future<void> loginUser() async {
+    final String apiUrl =
+        'https://notable-prawn-brave.ngrok-free.app/api/login';
+
+    try {
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        body: {
+          'email': emailController.text,
+          'password': passwordController.text,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+
+        if (responseData['status'] == 'success') {
+          // Check if the user is an admin based on your user data
+          String email = emailController.text;
+
+          if (email == "admin@gmail.com") {
+            Get.snackbar('Success', 'Admin Login Successfully.',
+                snackPosition: SnackPosition.TOP);
+            Get.offAll(const AdminHome());
+          } else {
+            Get.snackbar('Success', 'User Login Successfully.',
+                snackPosition: SnackPosition.TOP);
+            // Get.offAll(HomeScreen());
+            Navigator.popAndPushNamed(
+              context,
+              AppRoutes.home,
+            );
+          }
+        } else {
+          // Show error message
+          Get.snackbar('Error', responseData['message'],
+              snackPosition: SnackPosition.TOP);
+        }
+      } else {
+        // Show error message for any other status code
+        Get.snackbar('Error', 'Invalid login credentials. Please try again.',
+            snackPosition: SnackPosition.TOP);
+      }
+    } catch (e) {
+      // Handle any other exceptions
+      Get.snackbar('Error', e.toString(), snackPosition: SnackPosition.TOP);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
         child: Column(
           children: [
             const SizedBox(height: 64),
@@ -47,37 +105,75 @@ class _SignInPageState extends State<SignInPage> {
                   child: Form(
                     child: Column(
                       children: [
-                        TextFormField(
-                          keyboardType: TextInputType.emailAddress,
-                          textInputAction: TextInputAction.next,
-                          cursorColor: kPrimaryColor,
-                          onSaved: (email) {},
-                          decoration: const InputDecoration(
-                            hintText: "Your email",
-                            prefixIcon: Padding(
-                              padding: EdgeInsets.all(16),
-                              child: Icon(Icons.person),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Email',
+                              style: TextStyle(
+                                      color: Color(0xFF999999),
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400,
+                                      fontFamily: 'Poppins')
+                                  .copyWith(fontSize: 17),
                             ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          child: TextFormField(
-                            textInputAction: TextInputAction.done,
-                            obscureText: true,
-                            cursorColor: kPrimaryColor,
-                            decoration: const InputDecoration(
-                              hintText: "Your password",
-                              prefixIcon: Padding(
-                                padding: EdgeInsets.all(16),
-                                child: Icon(Icons.lock),
+                            TextFormField(
+                              textInputAction: TextInputAction.next,
+                              controller: emailController,
+                              cursorColor: Color(0xFF8B4513),
+                              keyboardType: TextInputType.emailAddress,
+                              decoration: InputDecoration(
+                                hintText: 'Enter your email',
+                                hintStyle: TextStyle(fontSize: 20),
+                                focusedBorder: const UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color(0xFF8B4513),
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
+                          ],
                         ),
-                        const SizedBox(height: 16),
+                        const SizedBox(height: 16 / 2),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Password',
+                              style: TextStyle(
+                                      color: Color(0xFF999999),
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400,
+                                      fontFamily: 'Poppins')
+                                  .copyWith(fontSize: 17),
+                            ),
+                            TextFormField(
+                              textInputAction: TextInputAction.next,
+                              controller: passwordController,
+                              cursorColor: Color(0xFF8B4513),
+                              keyboardType: TextInputType.visiblePassword,
+                              decoration: InputDecoration(
+                                hintText: 'Enter your password',
+                                hintStyle: TextStyle(fontSize: 20),
+                                focusedBorder: const UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color(0xFF8B4513),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16 / 2),
                         ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            // Navigator.popAndPushNamed(
+                            //   context,
+                            //   AppRoutes.home,
+                            // );
+
+                            loginUser();
+                          },
                           child: Text(
                             "Login".toUpperCase(),
                           ),
@@ -176,7 +272,7 @@ class AlreadyHaveAnAccountCheck extends StatelessWidget {
         GestureDetector(
           onTap: press as void Function()?,
           child: Text(
-            login ? "Sign Up" : "Sign In",
+            login ? "Register" : "Sign In",
             style: const TextStyle(
               color: kPrimaryColor,
               fontWeight: FontWeight.bold,
@@ -196,93 +292,210 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  // Controllers for text fields
+  TextEditingController fullNameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
+  // Method to register user
+  Future<void> registerUser() async {
+    final String apiUrl =
+        'https://notable-prawn-brave.ngrok-free.app/api/register';
+
+    try {
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        body: {
+          'full_name': fullNameController.text,
+          'email': emailController.text,
+          'password': passwordController.text,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        // Decode the response
+        final Map<String, dynamic> responseData = json.decode(response.body);
+
+        if (responseData['status'] == 'success') {
+          // Navigate to OTP Verification screen if registration is successful
+          // Get.to(OtpVerification());
+
+          Get.snackbar('Success', 'Register Successfully.',
+              snackPosition: SnackPosition.TOP);
+          // Get.offAll(SignInPage());
+          Navigator.popAndPushNamed(
+            context,
+            AppRoutes.signIn,
+          );
+        } else {
+          // Show error message
+          Get.snackbar('Error', responseData['message'],
+              snackPosition: SnackPosition.TOP);
+        }
+      } else {
+        // Show error message for any other status code
+        Get.snackbar('Error', 'Failed to register. Please try again.',
+            snackPosition: SnackPosition.TOP);
+      }
+    } catch (e) {
+      // Handle any other exceptions
+      Get.snackbar('Error', e.toString(), snackPosition: SnackPosition.BOTTOM);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          const SizedBox(height: 64),
-          Text(
-            "Sign Up".toUpperCase(),
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 32),
-          Row(
-            children: [
-              const Spacer(),
-              Expanded(
-                flex: 8,
-                child: SvgPicture.asset(
-                  'images/signup.svg',
-                ),
-              ),
-              const Spacer(),
-            ],
-          ),
-          const SizedBox(height: 16),
-          Row(
-            children: [
-              Spacer(),
-              Expanded(
-                flex: 8,
-                child: Form(
-                  child: Column(
-                    children: [
-                      TextFormField(
-                        keyboardType: TextInputType.emailAddress,
-                        textInputAction: TextInputAction.next,
-                        cursorColor: kPrimaryColor,
-                        onSaved: (email) {},
-                        decoration: const InputDecoration(
-                          hintText: "Your email",
-                          prefixIcon: Padding(
-                            padding: EdgeInsets.all(16),
-                            child: Icon(Icons.person),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        child: TextFormField(
-                          textInputAction: TextInputAction.done,
-                          obscureText: true,
-                          cursorColor: kPrimaryColor,
-                          decoration: const InputDecoration(
-                            hintText: "Your password",
-                            prefixIcon: Padding(
-                              padding: EdgeInsets.all(16),
-                              child: Icon(Icons.lock),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 16 / 2),
-                      ElevatedButton(
-                        onPressed: () {},
-                        child: Text("Sign Up".toUpperCase()),
-                      ),
-                      const SizedBox(height: 16),
-                      AlreadyHaveAnAccountCheck(
-                        login: false,
-                        press: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return const SignInPage();
-                              },
-                            ),
-                          );
-                        },
-                      ),
-                    ],
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Column(
+          children: [
+            const SizedBox(height: 64),
+            Text(
+              "Register".toUpperCase(),
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 32),
+            Row(
+              children: [
+                const Spacer(),
+                Expanded(
+                  flex: 8,
+                  child: SvgPicture.asset(
+                    'images/signup.svg',
                   ),
                 ),
-              ),
-              Spacer(),
-            ],
-          ),
-        ],
+                const Spacer(),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Spacer(),
+                Expanded(
+                  flex: 8,
+                  child: Form(
+                    child: Column(
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Full Name',
+                              style: TextStyle(
+                                      color: Color(0xFF999999),
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400,
+                                      fontFamily: 'Poppins')
+                                  .copyWith(fontSize: 17),
+                            ),
+                            TextFormField(
+                              textInputAction: TextInputAction.next,
+                              controller: fullNameController,
+                              cursorColor: Color(0xFF8B4513),
+                              keyboardType: TextInputType.name,
+                              decoration: InputDecoration(
+                                hintText: 'Enter your full Name',
+                                hintStyle: TextStyle(fontSize: 20),
+                                focusedBorder: const UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color(0xFF8B4513),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16 / 2),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Email',
+                              style: TextStyle(
+                                      color: Color(0xFF999999),
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400,
+                                      fontFamily: 'Poppins')
+                                  .copyWith(fontSize: 17),
+                            ),
+                            TextFormField(
+                              textInputAction: TextInputAction.next,
+                              controller: emailController,
+                              cursorColor: Color(0xFF8B4513),
+                              keyboardType: TextInputType.emailAddress,
+                              decoration: InputDecoration(
+                                hintText: 'Enter your email',
+                                hintStyle: TextStyle(fontSize: 20),
+                                focusedBorder: const UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color(0xFF8B4513),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16 / 2),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Password',
+                              style: TextStyle(
+                                      color: Color(0xFF999999),
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400,
+                                      fontFamily: 'Poppins')
+                                  .copyWith(fontSize: 17),
+                            ),
+                            TextFormField(
+                              textInputAction: TextInputAction.next,
+                              controller: passwordController,
+                              cursorColor: Color(0xFF8B4513),
+                              keyboardType: TextInputType.visiblePassword,
+                              decoration: InputDecoration(
+                                hintText: 'Enter your password',
+                                hintStyle: TextStyle(fontSize: 20),
+                                focusedBorder: const UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color(0xFF8B4513),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16 / 2),
+                        ElevatedButton(
+                          onPressed: () {
+                            registerUser();
+                          },
+                          child: Text("Register".toUpperCase()),
+                        ),
+                        const SizedBox(height: 16),
+                        AlreadyHaveAnAccountCheck(
+                          login: false,
+                          press: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return const SignInPage();
+                                },
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Spacer(),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
