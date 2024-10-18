@@ -26,7 +26,7 @@ class _AdminHomeState extends State<AdminHome> {
       ),
       body: SingleChildScrollView(
         child: Center(
-          child: Text('Admin Home'),
+          child: Text('Admin Home page'),
         ),
       ),
     );
