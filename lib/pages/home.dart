@@ -106,7 +106,10 @@ class _HomeState extends State<Home> {
         activeIndex: activeIndex,
         count: 3,
         effect: SlideEffect(
-            dotWidth: 15, dotHeight: 15, activeDotColor: Colors.blue),
+          dotWidth: 15,
+          dotHeight: 15,
+          activeDotColor: Colors.blue,
+        ),
       );
 
   Widget buildImage(String urlImage, int index) => Container(

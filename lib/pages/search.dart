@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:my_flutter_wallpaper/utils/loader.dart';
 import 'package:my_flutter_wallpaper/widget/widget.dart';
 
 import '../models/photo_model.dart';
@@ -16,10 +17,12 @@ class Search extends StatefulWidget {
 class _SearchState extends State<Search> {
   List<PhotosModel> photos = [];
   TextEditingController searchcontroller = new TextEditingController();
-  bool search = false;
   bool loader = false;
 
   getSearchWallpaper(String searchQuery) async {
+    setState(() {
+      loader = true;
+    });
     await http.get(
         Uri.parse(
             "https://api.pexels.com/v1/search?query=$searchQuery&per_page=30"),
@@ -33,9 +36,9 @@ class _SearchState extends State<Search> {
         photosModel = PhotosModel.fromMap(element);
         photos.add(photosModel);
       });
-      setState(() {
-        search = true;
-      });
+    });
+    setState(() {
+      loader = false;
     });
   }
 
@@ -71,55 +74,40 @@ class _SearchState extends State<Search> {
                 ),
               ),
               child: TextField(
-                  controller: searchcontroller,
-                  onSubmitted: (value) {
-                    setState(() => loader = true);
-                    getSearchWallpaper(searchcontroller.text);
-                    setState(() => loader = false);
-                  },
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    suffix: GestureDetector(
-                        onTap: () {
-                          setState(() => loader = true);
-                          getSearchWallpaper(searchcontroller.text);
-                          setState(() => loader = false);
-                        },
-                        child: search
-                            ? GestureDetector(
-                          onTap: () {
-                            photos = [];
-                            search = false;
-                            setState(() {});
-                          },
-                          child: Icon(
-                            Icons.close,
-                            color:
-                            Color.fromARGB(255, 84, 87, 93),
-                          ),
-                        )
-                            : Icon(
-                          Icons.search_outlined,
-                          color: Color.fromARGB(255, 84, 87, 93),
-                        )),
-                  )),
+                controller: searchcontroller,
+                onChanged: (value) {
+                  getSearchWallpaper(searchcontroller.text);
+                },
+                onSubmitted: (value) {
+                  setState(() => loader = true);
+                  getSearchWallpaper(searchcontroller.text);
+                  setState(() => loader = false);
+                },
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  suffix: GestureDetector(
+                    onTap: () {
+                      setState(() => loader = true);
+                      getSearchWallpaper(searchcontroller.text);
+                      setState(() => loader = false);
+                    },
+                    child: Icon(
+                      Icons.search_outlined,
+                      color: Color.fromARGB(255, 84, 87, 93),
+                    ),),
+                ),),
             ),
             SizedBox(
               height: 20.0,
             ),
             Expanded(
-              child: loader
-                  ? Center(
-                child: CircularProgressIndicator(
-                  color: Colors.black,
-                  strokeWidth: 1.5,
-                ),
-              )
-                  : wallpaper(
+              child: loader ? Center(child: Loader(heightWidth: 30,),)
+              : wallpaper(
                 photos,
                 context,
               ),
             ),
+
           ],
         ),
       ),

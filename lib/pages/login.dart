@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:my_flutter_wallpaper/Admin/admin_home.dart';
 import 'package:my_flutter_wallpaper/pages/register.dart';
+import 'package:my_flutter_wallpaper/utils/loader.dart';
 import 'package:my_flutter_wallpaper/utils/routes/route.dart';
 
 import '../utils/colors.dart';
@@ -24,18 +25,25 @@ class SignInPage extends StatefulWidget {
 class _SignInPageState extends State<SignInPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  bool loader = false;
 
   Future<void> loginUser() async {
     final String apiUrl =
         'https://notable-prawn-brave.ngrok-free.app/api/login';
 
     try {
+      setState(
+        () => loader = true,
+      );
       final response = await http.post(
         Uri.parse(apiUrl),
         body: {
           'email': emailController.text,
           'password': passwordController.text,
         },
+      );
+      setState(
+        () => loader = false,
       );
 
       if (response.statusCode == 200) {
@@ -48,7 +56,10 @@ class _SignInPageState extends State<SignInPage> {
           if (email == "admin@gmail.com") {
             Get.snackbar('Success', 'Admin Login Successfully.',
                 snackPosition: SnackPosition.TOP);
-            Get.offAll(const AdminHome());
+            Navigator.popAndPushNamed(
+              context,
+              AppRoutes.adminHome,
+            );
           } else {
             Get.snackbar('Success', 'User Login Successfully.',
                 snackPosition: SnackPosition.TOP);
@@ -165,18 +176,26 @@ class _SignInPageState extends State<SignInPage> {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 16 / 2),
-                        ElevatedButton(
-                          onPressed: () {
-                            // Navigator.popAndPushNamed(
-                            //   context,
-                            //   AppRoutes.home,
-                            // );
+                        const SizedBox(
+                          height: 32,
+                        ),
+                        SizedBox(
+                          height: 40,
+                          width: 100,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              // Navigator.popAndPushNamed(
+                              //   context,
+                              //   AppRoutes.home,
+                              // );
 
-                            loginUser();
-                          },
-                          child: Text(
-                            "Login".toUpperCase(),
+                              loginUser();
+                            },
+                            child: loader
+                                ? Loader()
+                                : Text(
+                                    "Login".toUpperCase(),
+                                  ),
                           ),
                         ),
                         const SizedBox(height: 16),
