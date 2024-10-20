@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:my_flutter_wallpaper/Admin/admin_home.dart';
 import 'package:my_flutter_wallpaper/pages/register.dart';
+import 'package:my_flutter_wallpaper/utils/routes/route.dart';
 
 import '../utils/colors.dart';
 import '../utils/routes/route.dart';
