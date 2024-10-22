@@ -35,42 +35,33 @@ class _AddEditWallpaperState extends State<AddEditWallpaper> {
     if (widget.arguments != null &&
         widget.arguments is NavigationForAddEditWallpaperState) {
       state = widget.arguments as NavigationForAddEditWallpaperState;
-      if(state != null && state!.argument != null && state!.argument!.image.isNotEmpty){
+      if (state != null &&
+          state!.argument != null &&
+          state!.argument!.image.isNotEmpty) {
         File file = File(state!.argument!.image);
         image = XFile(file.path);
       }
       if (state != null &&
-          (state!.navigationEnum == NavigationEnum.addPaidWallpaper ||
-              state!.navigationEnum == NavigationEnum.editPaidWallpaper)) {
+          (state!.navigationEnum == NavigationEnum.addFreeWallpaper ||
+              state!.navigationEnum == NavigationEnum.editFreeWallpaper)) {
         wallpaperCategories = [
-          'Paid First',
-          'Paid Second',
-          'Paid Third',
-          'Paid Fourth',
-          'Paid Fifth',
-          'Paid Sixth',
+          'Wildlife',
+          'Cars',
+          'Nature',
+          'MarvelStudio',
         ];
-      } else {
-        wallpaperCategories = [
-          'Free First',
-          'Free Second',
-          'Free Third',
-          'Free Fourth',
-          'Free Fifth',
-          'Free Sixth',
-        ];
-      }
-
-      if (state != null && state!.argument != null) {
-        selectedCategories = state!.argument!.category;
-      } else {
-        selectedCategories = wallpaperCategories.first;
+        if (state != null && state!.argument != null) {
+          selectedCategories = state!.argument!.category;
+        } else {
+          selectedCategories = wallpaperCategories.first;
+        }
       }
 
       isAddEditPaidWallpaper =
           (state!.navigationEnum == NavigationEnum.addPaidWallpaper ||
               state!.navigationEnum == NavigationEnum.editPaidWallpaper);
     }
+    log(wallpaperCategories.length.toString());
     loaderSample();
     super.initState();
   }
@@ -202,45 +193,46 @@ class _AddEditWallpaperState extends State<AddEditWallpaper> {
                     ),
                   ),
                   Spacer(),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: DropdownButton<String>(
-                          value: selectedCategories,
-                          isExpanded: true,
-                          icon: Icon(
-                            Icons.keyboard_arrow_down_rounded,
-                            color: Colors.black,
-                          ),
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 14,
-                          ),
-                          borderRadius: BorderRadius.circular(
-                            15,
-                          ),
-                          items: wallpaperCategories
-                              .map<DropdownMenuItem<String>>(
-                                (e) => DropdownMenuItem<String>(
-                                  value: e,
-                                  child: CustomText(
-                                    text: e,
-                                    fontSize: 14,
-                                    // color: Colors.black,
+                  if (wallpaperCategories.isNotEmpty)
+                    Row(
+                      children: [
+                        Expanded(
+                          child: DropdownButton<String>(
+                            value: selectedCategories,
+                            isExpanded: true,
+                            icon: Icon(
+                              Icons.keyboard_arrow_down_rounded,
+                              color: Colors.black,
+                            ),
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                            ),
+                            borderRadius: BorderRadius.circular(
+                              15,
+                            ),
+                            items: wallpaperCategories
+                                .map<DropdownMenuItem<String>>(
+                                  (e) => DropdownMenuItem<String>(
+                                    value: e,
+                                    child: CustomText(
+                                      text: e,
+                                      fontSize: 14,
+                                      // color: Colors.black,
+                                    ),
                                   ),
-                                ),
-                              )
-                              .toList(),
-                          onChanged: (value) {
-                            setState(() {
-                              selectedCategories = value!;
-                              log(selectedCategories.toString());
-                            });
-                          },
+                                )
+                                .toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                selectedCategories = value!;
+                                log(selectedCategories.toString());
+                              });
+                            },
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
+                      ],
+                    ),
                   SizedBox(height: 25),
                   GestureDetector(
                     behavior: HitTestBehavior.translucent,

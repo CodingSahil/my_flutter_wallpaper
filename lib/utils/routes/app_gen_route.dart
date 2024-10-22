@@ -3,6 +3,7 @@ import 'package:my_flutter_wallpaper/Admin/add-edit-wallpaper.dart';
 import 'package:my_flutter_wallpaper/Admin/admin_home.dart';
 import 'package:my_flutter_wallpaper/pages/bottomnav.dart';
 import 'package:my_flutter_wallpaper/pages/login.dart';
+import 'package:my_flutter_wallpaper/pages/make_payment.dart';
 import 'package:my_flutter_wallpaper/pages/register.dart';
 import 'package:my_flutter_wallpaper/pages/splash_page.dart';
 import 'package:my_flutter_wallpaper/utils/routes/route.dart';
@@ -48,9 +49,16 @@ Route<dynamic> onGenerate(RouteSettings setting) {
 
     case AppRoutes.wallpaperList:
       var arguments = setting.arguments;
-
       return MaterialPageRoute(
         builder: (context) => ListOfWallpaper(
+          arguments: arguments,
+        ),
+      );
+
+    case AppRoutes.makePayment:
+      var arguments = setting.arguments;
+      return MaterialPageRoute(
+        builder: (context) => MakePayment(
           arguments: arguments,
         ),
       );

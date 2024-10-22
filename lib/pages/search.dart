@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -6,6 +7,8 @@ import 'package:my_flutter_wallpaper/utils/loader.dart';
 import 'package:my_flutter_wallpaper/widget/widget.dart';
 
 import '../models/photo_model.dart';
+
+// https://images.pexels.com/photos/280249/pexels-photo-280249.jpeg
 
 class Search extends StatefulWidget {
   const Search({super.key});
@@ -30,6 +33,10 @@ class _SearchState extends State<Search> {
           "Authorization":
               "PLu1ER76ggSeyjFj8x9ZzR0FqM1JqcJVfTk2tW1nSvfn2ZXIh2wKcLd6"
         }).then((value) {
+      log(
+        value.body,
+        name: 'Response => ',
+      );
       Map<String, dynamic> jsonData = jsonDecode(value.body);
       jsonData["photos"].forEach((element) {
         PhotosModel photosModel = new PhotosModel();
@@ -94,20 +101,26 @@ class _SearchState extends State<Search> {
                     child: Icon(
                       Icons.search_outlined,
                       color: Color.fromARGB(255, 84, 87, 93),
-                    ),),
-                ),),
+                    ),
+                  ),
+                ),
+              ),
             ),
             SizedBox(
               height: 20.0,
             ),
             Expanded(
-              child: loader ? Center(child: Loader(heightWidth: 30,),)
-              : wallpaper(
-                photos,
-                context,
-              ),
+              child: loader
+                  ? Center(
+                      child: Loader(
+                        heightWidth: 30,
+                      ),
+                    )
+                  : wallpaper(
+                      photos,
+                      context,
+                    ),
             ),
-
           ],
         ),
       ),

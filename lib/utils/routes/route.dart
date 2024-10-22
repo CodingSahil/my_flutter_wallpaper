@@ -6,4 +6,5 @@ class AppRoutes{
   static const String adminHome = '/admin_home.dart';
   static const String addEditWallpaper = '/add-edit-wallpaper.dart';
   static const String wallpaperList = '/list.dart';
+  static const String makePayment = '/MakePayment.dart';
 }

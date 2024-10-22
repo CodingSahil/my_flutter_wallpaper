@@ -5,16 +5,24 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:my_flutter_wallpaper/utils/routes/route.dart';
 import 'package:share_plus/share_plus.dart';
 
 // import 'package:image_gallery_saver/image_gallery_saver.dart';
 
+enum FullScreenType {
+  unPaidWallpaper,
+  paidWallpaper,
+}
+
 class FullScreen extends StatefulWidget {
   final String imaagepath;
   final bool isInWishlist;
+  final FullScreenType fullScreenType;
 
   FullScreen({
     required this.imaagepath,
+    required this.fullScreenType,
     this.isInWishlist = false,
   });
 
@@ -83,62 +91,146 @@ class _FullScreenState extends State<FullScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Expanded(
-                      child: GestureDetector(
-                        behavior: HitTestBehavior.translucent,
-                        onTap: () async {
-                          setState(() {
-                            loader = true;
-                          });
-                          var dummyFile =
-                              await defaultCacheManager.downloadFile(
-                            widget.imaagepath.toString(),
-                          );
-                          file = await defaultCacheManager.putFile(
-                            dummyFile.originalUrl,
-                            Uint8List(
-                              dummyFile.file.lengthSync(),
+                    if (widget.fullScreenType == FullScreenType.unPaidWallpaper)
+                      Expanded(
+                        child: GestureDetector(
+                          behavior: HitTestBehavior.translucent,
+                          onTap: () async {
+                            setState(() {
+                              loader = true;
+                            });
+                            var dummyFile =
+                                await defaultCacheManager.downloadFile(
+                              widget.imaagepath.toString(),
+                              key: 'DownloadedImage',
+                            );
+                            file = await defaultCacheManager.putFile(
+                              dummyFile.originalUrl,
+                              Uint8List(
+                                dummyFile.file.lengthSync(),
+                              ),
+                              key: 'DownloadedImage',
+                            );
+                            log(file?.path.toString() ?? '', name: 'path => ');
+                            final FileInfo? localFile =
+                                await defaultCacheManager.getFileFromCache(
+                              'DownloadedImage',
+                            );
+                            log(
+                              localFile?.file.path.toString() ?? '',
+                              name: 'localFile path => ',
+                            );
+
+                            setState(() {
+                              loader = false;
+                            });
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(
+                                14,
+                              ),
+                              color: Color.fromARGB(255, 84, 87, 93),
                             ),
-                          );
-                          log(file?.path.toString() ?? '', name: 'path => ');
-                          setState(() {
-                            loader = false;
-                          });
-                          return;
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(
-                              14,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                if (loader)
+                                  SizedBox(
+                                    height: 20,
+                                    width: 20,
+                                    child: CircularProgressIndicator(
+                                      color: Colors.white,
+                                      strokeWidth: 1.5,
+                                    ),
+                                  )
+                                else
+                                  Text(
+                                    "Set Wallpaper",
+                                    style: TextStyle(
+                                      fontSize: 14.0,
+                                      color: Colors.white,
+                                      fontFamily: 'Poppins',
+                                    ),
+                                  ),
+                              ],
                             ),
-                            color: Color.fromARGB(255, 84, 87, 93),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              if (loader)
-                                SizedBox(
-                                  height: 20,
-                                  width: 20,
-                                  child: CircularProgressIndicator(
-                                    color: Colors.white,
-                                    strokeWidth: 1.5,
-                                  ),
-                                )
-                              else
-                                Text(
-                                  "Set Wallpaper",
-                                  style: TextStyle(
-                                    fontSize: 14.0,
-                                    color: Colors.white,
-                                    fontFamily: 'Poppins',
-                                  ),
-                                ),
-                            ],
                           ),
                         ),
                       ),
-                    ),
+                    if (widget.fullScreenType == FullScreenType.paidWallpaper)
+                      Expanded(
+                        child: GestureDetector(
+                          behavior: HitTestBehavior.translucent,
+                          onTap: () async {
+                            setState(() {
+                              loader = true;
+                            });
+                            var dummyFile =
+                            await defaultCacheManager.downloadFile(
+                              widget.imaagepath.toString(),
+                              key: 'DownloadedImage',
+                            );
+                            file = await defaultCacheManager.putFile(
+                              dummyFile.originalUrl,
+                              Uint8List(
+                                dummyFile.file.lengthSync(),
+                              ),
+                              key: 'DownloadedImage',
+                            );
+                            log(file?.path.toString() ?? '', name: 'path => ');
+                            final FileInfo? localFile =
+                            await defaultCacheManager.getFileFromCache(
+                              'DownloadedImage',
+                            );
+                            log(
+                              localFile?.file.path.toString() ?? '',
+                              name: 'localFile path => ',
+                            );
+
+                            setState(() {
+                              loader = false;
+                            });
+                            return;
+                            Navigator.pushNamed(
+                              context,
+                              AppRoutes.makePayment,
+                              arguments: 'Make a Payment !!',
+                            );
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(
+                                14,
+                              ),
+                              color: Colors.orangeAccent,
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                if (loader)
+                                  SizedBox(
+                                    height: 20,
+                                    width: 20,
+                                    child: CircularProgressIndicator(
+                                      color: Colors.black,
+                                      strokeWidth: 1.5,
+                                    ),
+                                  )
+                                else
+                                  Text(
+                                    "Make a Payment",
+                                    style: TextStyle(
+                                      fontSize: 15.0,
+                                      color: Colors.black,
+                                      fontFamily: 'Poppins',
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
                     SizedBox(width: 12),
                     GestureDetector(
                       behavior: HitTestBehavior.translucent,
@@ -165,11 +257,14 @@ class _FullScreenState extends State<FullScreen> {
                       onTap: () async {
                         File file = await defaultCacheManager
                             .getSingleFile(widget.imaagepath);
-                        final result = await Share.shareXFiles([
-                          XFile(
-                            file.path,
-                          ),
-                        ], text: 'Great picture');
+                        final result = await Share.shareXFiles(
+                          [
+                            XFile(
+                              file.path,
+                            ),
+                          ],
+                          text: 'Great picture',
+                        );
                         log('message');
                         if (result.status == ShareResultStatus.success) {
                           print('Thank you for sharing the picture!');

@@ -3,24 +3,39 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:my_flutter_wallpaper/pages/full_screen.dart';
 import '../models/photo_model.dart';
 
-Widget wallpaper(List<PhotosModel> listphotos, BuildContext context){
+Widget wallpaper(List<PhotosModel> listphotos, BuildContext context) {
   return Container(
     padding: EdgeInsets.symmetric(horizontal: 16),
     child: GridView.count(
-    padding: EdgeInsets.all(4.0),
-    crossAxisCount: 2,
-    childAspectRatio: 0.6,
-    mainAxisSpacing: 6.0,
-    crossAxisSpacing: 6.0,
-  children: listphotos.map((PhotosModel photosModel){
-      return GridTile(child: GestureDetector(
-        onTap: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context)=> FullScreen(imaagepath: photosModel.src!.portrait!)));
-        },
-        child: Hero(tag: photosModel.src!.portrait!, child: Container(
-            child: CachedNetworkImage(imageUrl: photosModel.src!.portrait!,fit: BoxFit.cover,)
-          ),),
-      ));
-  }).toList(),),
+      padding: EdgeInsets.all(4.0),
+      crossAxisCount: 2,
+      childAspectRatio: 0.6,
+      mainAxisSpacing: 6.0,
+      crossAxisSpacing: 6.0,
+      children: listphotos.map((PhotosModel photosModel) {
+        return GridTile(
+            child: GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => FullScreen(
+                  imaagepath: photosModel.src!.portrait!,
+                  fullScreenType: FullScreenType.unPaidWallpaper,
+                ),
+              ),
+            );
+          },
+          child: Hero(
+            tag: photosModel.src!.portrait!,
+            child: Container(
+                child: CachedNetworkImage(
+              imageUrl: photosModel.src!.portrait!,
+              fit: BoxFit.cover,
+            )),
+          ),
+        ));
+      }).toList(),
+    ),
   );
 }
