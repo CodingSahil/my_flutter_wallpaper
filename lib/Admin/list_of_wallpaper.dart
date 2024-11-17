@@ -147,15 +147,10 @@ class _ListOfWallpaperState extends State<ListOfWallpaper> {
                                                 EnumForListCategory.paid
                                             ? 'Edit Paid Wallpaper'
                                             : 'Edit Free Wallpaper',
-                                        navigationEnum: enumForListCategory ==
-                                                EnumForListCategory.paid
-                                            ? NavigationEnum.editPaidWallpaper
-                                            : NavigationEnum.editFreeWallpaper,
+                                        navigationEnum:
+                                            NavigationEnum.editWallpaper,
                                         argument: NavigationData(
-                                          category: enumForListCategory ==
-                                                  EnumForListCategory.paid
-                                              ? 'Paid Fifth'
-                                              : 'Free Second',
+                                          category: 'Nature',
                                           image: wallpaperDetails.image,
                                         ),
                                       ),
@@ -170,10 +165,18 @@ class _ListOfWallpaperState extends State<ListOfWallpaper> {
                                 SizedBox(
                                   width: 10,
                                 ),
-                                Icon(
-                                  Icons.delete,
-                                  color: Colors.red,
-                                  size: 20,
+                                GestureDetector(
+                                  behavior: HitTestBehavior.translucent,
+                                  onTap: () {
+                                    setState(() {
+                                      listOfWallpapers.remove(wallpaperDetails);
+                                    });
+                                  },
+                                  child: Icon(
+                                    Icons.delete,
+                                    color: Colors.red,
+                                    size: 20,
+                                  ),
                                 ),
                               ],
                             ),

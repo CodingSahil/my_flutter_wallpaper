@@ -3,13 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:my_flutter_wallpaper/Admin/admin_home.dart';
 import 'package:my_flutter_wallpaper/pages/register.dart';
+import 'package:my_flutter_wallpaper/utils/colors.dart';
 import 'package:my_flutter_wallpaper/utils/loader.dart';
 import 'package:my_flutter_wallpaper/utils/routes/route.dart';
 
-import '../utils/colors.dart';
-import '../utils/routes/route.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -564,10 +562,11 @@ class _NavigationPageState extends State<NavigationPage> {
       child: Text(
         title,
         style: const TextStyle(
-            fontFamily: "mont",
-            fontWeight: FontWeight.bold,
-            color: blackColor,
-            fontSize: 35),
+          fontFamily: "mont",
+          fontWeight: FontWeight.bold,
+          color: blackColor,
+          fontSize: 35,
+        ),
       ),
     );
   }
@@ -673,15 +672,16 @@ class BackgroundWidget extends StatelessWidget {
 }
 
 class CustomBtn extends StatelessWidget {
-  String text;
-  Color color;
-  VoidCallback onTap;
+ final String text;
+ final Color color;
+ final VoidCallback onTap;
 
-  CustomBtn(
-      {super.key,
-      required this.text,
-      required this.color,
-      required this.onTap});
+  CustomBtn({
+    super.key,
+    required this.text,
+    required this.color,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -716,7 +716,7 @@ class CustomBtn extends StatelessWidget {
 }
 
 class HaveAccountWidget extends StatelessWidget {
-  bool haveAccount;
+  final bool haveAccount;
 
   HaveAccountWidget({
     super.key,

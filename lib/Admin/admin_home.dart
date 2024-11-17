@@ -8,10 +8,8 @@ import '../pages/login.dart';
 import 'list_of_wallpaper.dart';
 
 enum NavigationEnum {
-  addFreeWallpaper,
-  editFreeWallpaper,
-  addPaidWallpaper,
-  editPaidWallpaper,
+  addWallpaper,
+  editWallpaper,
 }
 
 class NavigationForAddEditWallpaperState {
@@ -130,23 +128,21 @@ class _AdminHomeState extends State<AdminHome> {
                     ),
                   ],
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: commonContainer(
-                        title: 'Add Free Wallpaper',
-                        navigationEnum: NavigationEnum.addFreeWallpaper,
-                      ),
-                    ),
-                    Expanded(
-                      child: commonContainer(
-                        title: 'Add Paid Wallpaper',
-                        navigationEnum: NavigationEnum.addPaidWallpaper,
-                        backGroundColor: Colors.orangeAccent,
-                      ),
-                    ),
-                  ],
+                // Row(
+                //   children: [
+                commonContainer(
+                  title: 'Add Free Wallpaper',
+                  navigationEnum: NavigationEnum.addWallpaper,
                 ),
+                //     Expanded(
+                //       child: commonContainer(
+                //         title: 'Add Paid Wallpaper',
+                //         navigationEnum: NavigationEnum.addPaidWallpaper,
+                //         backGroundColor: Colors.orangeAccent,
+                //       ),
+                //     ),
+                //   ],
+                // ),
                 Column(
                   children: [
                     Row(
@@ -156,8 +152,10 @@ class _AdminHomeState extends State<AdminHome> {
                             behavior: HitTestBehavior.translucent,
                             onTap: () {
                               Navigator.pushNamed(
-                                  context, AppRoutes.wallpaperList,
-                                  arguments: EnumForListCategory.free);
+                                context,
+                                AppRoutes.wallpaperList,
+                                arguments: EnumForListCategory.free,
+                              );
                             },
                             child: Container(
                               padding: EdgeInsets.symmetric(

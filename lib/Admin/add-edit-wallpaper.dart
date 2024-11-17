@@ -24,14 +24,23 @@ class _AddEditWallpaperState extends State<AddEditWallpaper> {
   bool loader = false;
   bool actionLoader = false;
   bool isAddEditPaidWallpaper = false;
-  String selectedCategories = '';
-  List<String> wallpaperCategories = [];
+  List<String> wallpaperCategories = [
+    'None',
+    'Wildlife',
+    'Cars',
+    'Nature',
+    'MarvelStudio',
+  ];
+  String selectedFreeCategories = '';
+  String selectedPaidCategories = '';
   XFile? image;
 
   NavigationForAddEditWallpaperState? state;
 
   @override
   void initState() {
+    selectedFreeCategories = wallpaperCategories.first;
+    selectedPaidCategories = wallpaperCategories.first;
     if (widget.arguments != null &&
         widget.arguments is NavigationForAddEditWallpaperState) {
       state = widget.arguments as NavigationForAddEditWallpaperState;
@@ -42,24 +51,15 @@ class _AddEditWallpaperState extends State<AddEditWallpaper> {
         image = XFile(file.path);
       }
       if (state != null &&
-          (state!.navigationEnum == NavigationEnum.addFreeWallpaper ||
-              state!.navigationEnum == NavigationEnum.editFreeWallpaper)) {
-        wallpaperCategories = [
-          'Wildlife',
-          'Cars',
-          'Nature',
-          'MarvelStudio',
-        ];
+          state!.navigationEnum == NavigationEnum.editWallpaper) {
         if (state != null && state!.argument != null) {
-          selectedCategories = state!.argument!.category;
+          selectedFreeCategories = state!.argument!.category;
+          selectedPaidCategories = state!.argument!.category;
         } else {
-          selectedCategories = wallpaperCategories.first;
+          selectedFreeCategories = wallpaperCategories.first;
+          selectedPaidCategories = wallpaperCategories.first;
         }
       }
-
-      isAddEditPaidWallpaper =
-          (state!.navigationEnum == NavigationEnum.addPaidWallpaper ||
-              state!.navigationEnum == NavigationEnum.editPaidWallpaper);
     }
     log(wallpaperCategories.length.toString());
     loaderSample();
@@ -97,6 +97,17 @@ class _AddEditWallpaperState extends State<AddEditWallpaper> {
       () => actionLoader = false,
     );
     Navigator.pop(context);
+  }
+
+  /// Todo :- @RahulMistry , i apply this for scenario of if you select category of free wallpaper , paid wallpaper will automatically select as none and visa-versa
+  void validationForDropDown({
+    bool changInPaidWallpaper = false,
+  }) {
+    if (changInPaidWallpaper) {
+      selectedFreeCategories = wallpaperCategories.first;
+    } else {
+      selectedPaidCategories = wallpaperCategories.first;
+    }
   }
 
   @override
@@ -193,47 +204,110 @@ class _AddEditWallpaperState extends State<AddEditWallpaper> {
                     ),
                   ),
                   Spacer(),
-                  if (wallpaperCategories.isNotEmpty)
-                    Row(
+                  if (wallpaperCategories.isNotEmpty) ...[
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Expanded(
-                          child: DropdownButton<String>(
-                            value: selectedCategories,
-                            isExpanded: true,
-                            icon: Icon(
-                              Icons.keyboard_arrow_down_rounded,
-                              color: Colors.black,
+                        CustomText(
+                          text: 'Free Category',
+                          fontSize: 15,
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: DropdownButton<String>(
+                                value: selectedFreeCategories,
+                                isExpanded: true,
+                                icon: Icon(
+                                  Icons.keyboard_arrow_down_rounded,
+                                  color: Colors.black,
+                                ),
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 14,
+                                ),
+                                borderRadius: BorderRadius.circular(
+                                  15,
+                                ),
+                                items: wallpaperCategories
+                                    .map<DropdownMenuItem<String>>(
+                                      (e) => DropdownMenuItem<String>(
+                                        value: e,
+                                        child: CustomText(
+                                          text: e,
+                                          fontSize: 14,
+                                          // color: Colors.black,
+                                        ),
+                                      ),
+                                    )
+                                    .toList(),
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectedFreeCategories = value!;
+                                    validationForDropDown();
+                                    log(selectedFreeCategories.toString());
+                                  });
+                                },
+                              ),
                             ),
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 14,
-                            ),
-                            borderRadius: BorderRadius.circular(
-                              15,
-                            ),
-                            items: wallpaperCategories
-                                .map<DropdownMenuItem<String>>(
-                                  (e) => DropdownMenuItem<String>(
-                                    value: e,
-                                    child: CustomText(
-                                      text: e,
-                                      fontSize: 14,
-                                      // color: Colors.black,
-                                    ),
-                                  ),
-                                )
-                                .toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                selectedCategories = value!;
-                                log(selectedCategories.toString());
-                              });
-                            },
-                          ),
+                          ],
                         ),
                       ],
                     ),
-                  SizedBox(height: 25),
+                    SizedBox(height: MediaQuery.sizeOf(context).height * 0.04),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CustomText(
+                          text: 'Paid Category',
+                          fontSize: 15,
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: DropdownButton<String>(
+                                value: selectedPaidCategories,
+                                isExpanded: true,
+                                icon: Icon(
+                                  Icons.keyboard_arrow_down_rounded,
+                                  color: Colors.black,
+                                ),
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 14,
+                                ),
+                                borderRadius: BorderRadius.circular(
+                                  15,
+                                ),
+                                items: wallpaperCategories
+                                    .map<DropdownMenuItem<String>>(
+                                      (e) => DropdownMenuItem<String>(
+                                        value: e,
+                                        child: CustomText(
+                                          text: e,
+                                          fontSize: 14,
+                                          // color: Colors.black,
+                                        ),
+                                      ),
+                                    )
+                                    .toList(),
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectedPaidCategories = value!;
+                                    validationForDropDown(
+                                      changInPaidWallpaper: true,
+                                    );
+                                    log(selectedPaidCategories.toString());
+                                  });
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                  SizedBox(height: MediaQuery.sizeOf(context).height * 0.04),
                   GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: actionCallBack,

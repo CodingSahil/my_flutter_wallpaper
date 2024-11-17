@@ -3,7 +3,6 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:my_flutter_wallpaper/utils/routes/route.dart';
 import 'package:share_plus/share_plus.dart';
@@ -191,6 +190,7 @@ class _FullScreenState extends State<FullScreen> {
                             setState(() {
                               loader = false;
                             });
+                            /// todo payment page @RahulMistry
                             return;
                             Navigator.pushNamed(
                               context,
