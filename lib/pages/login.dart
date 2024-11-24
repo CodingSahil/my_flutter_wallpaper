@@ -76,6 +76,7 @@ class _SignInPageState extends State<SignInPage> {
         // Show error message for any other status code
         Get.snackbar('Error', 'Invalid login credentials. Please try again.',
             snackPosition: SnackPosition.TOP);
+        print(response.body);
       }
     } catch (e) {
       // Handle any other exceptions
@@ -352,8 +353,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
         }
       } else {
         // Show error message for any other status code
-        Get.snackbar('Error', 'Failed to register. Please try again.',
+        Get.snackbar('Error', 'Failed to register. Please try again. ${response.body}',
             snackPosition: SnackPosition.TOP);
+        print(response.body);
       }
     } catch (e) {
       // Handle any other exceptions
@@ -672,9 +674,9 @@ class BackgroundWidget extends StatelessWidget {
 }
 
 class CustomBtn extends StatelessWidget {
- final String text;
- final Color color;
- final VoidCallback onTap;
+  final String text;
+  final Color color;
+  final VoidCallback onTap;
 
   CustomBtn({
     super.key,
