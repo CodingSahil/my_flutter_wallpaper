@@ -39,6 +39,8 @@ class _AddEditWallpaperState extends State<AddEditWallpaper> {
   ];
   String? selectedCategory;
   String? selectedType;
+  String selectedFreeCategories = '';
+  String selectedPaidCategories = '';
   XFile? image;
   // File? _pickedWallpaperImage;
 
@@ -46,8 +48,6 @@ class _AddEditWallpaperState extends State<AddEditWallpaper> {
 
   @override
   void initState() {
-    selectedFreeCategories = wallpaperCategories.first;
-    selectedPaidCategories = wallpaperCategories.first;
     if (widget.arguments != null &&
         widget.arguments is NavigationForAddEditWallpaperState) {
       state = widget.arguments as NavigationForAddEditWallpaperState;
@@ -298,12 +298,12 @@ class _AddEditWallpaperState extends State<AddEditWallpaper> {
                                   // width: 150,
                                   // fit: BoxFit.cover,
                                 ),
-                              ],
+                      ),),],
                             ),
                           ),
                           // Spacer(),
                           SizedBox(height: 25),
-                        ],
+
                         GestureDetector(
                           behavior: HitTestBehavior.translucent,
                           onTap: () async {
