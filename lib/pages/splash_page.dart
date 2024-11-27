@@ -18,7 +18,7 @@ class _SplashScreenState extends State<SplashScreen> {
       ),
       () => Navigator.popAndPushNamed(
         context,
-        AppRoutes.adminHome,
+        AppRoutes.home,
       ),
     );
   }
@@ -31,7 +31,6 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    log('SplashScreen');
     return Scaffold(
       body: Center(
         child: Text(

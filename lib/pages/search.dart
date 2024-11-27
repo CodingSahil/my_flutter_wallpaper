@@ -33,10 +33,10 @@ class _SearchState extends State<Search> {
           "Authorization":
               "PLu1ER76ggSeyjFj8x9ZzR0FqM1JqcJVfTk2tW1nSvfn2ZXIh2wKcLd6"
         }).then((value) {
-      log(
-        value.body,
-        name: 'Response => ',
-      );
+      // log(
+      //   value.body,
+      //   name: 'Response => ',
+      // );
       Map<String, dynamic> jsonData = jsonDecode(value.body);
       jsonData["photos"].forEach((element) {
         PhotosModel photosModel = new PhotosModel();

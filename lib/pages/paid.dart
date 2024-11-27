@@ -77,10 +77,11 @@ class _PaidWallpaperPageState extends State<PaidWallpaperPage> {
                     child: Hero(
                       tag: photosModel.src!.portrait!,
                       child: Container(
-                          child: CachedNetworkImage(
-                        imageUrl: photosModel.src!.portrait!,
-                        fit: BoxFit.cover,
-                      )),
+                        child: CachedNetworkImage(
+                          imageUrl: photosModel.src!.portrait!,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
                     ),
                   ));
                 }).toList(),

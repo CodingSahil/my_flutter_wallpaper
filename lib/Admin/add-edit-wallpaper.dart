@@ -46,6 +46,29 @@ class _AddEditWallpaperState extends State<AddEditWallpaper> {
 
   @override
   void initState() {
+    selectedFreeCategories = wallpaperCategories.first;
+    selectedPaidCategories = wallpaperCategories.first;
+    if (widget.arguments != null &&
+        widget.arguments is NavigationForAddEditWallpaperState) {
+      state = widget.arguments as NavigationForAddEditWallpaperState;
+      if (state != null &&
+          state!.argument != null &&
+          state!.argument!.image.isNotEmpty) {
+        File file = File(state!.argument!.image);
+        image = XFile(file.path);
+      }
+      if (state != null &&
+          state!.navigationEnum == NavigationEnum.editWallpaper) {
+        if (state != null && state!.argument != null) {
+          selectedFreeCategories = state!.argument!.category;
+          selectedPaidCategories = state!.argument!.category;
+        } else {
+          selectedFreeCategories = wallpaperCategories.first;
+          selectedPaidCategories = wallpaperCategories.first;
+        }
+      }
+    }
+    // log(wallpaperCategories.length.toString());
     loaderSample();
     super.initState();
   }
@@ -271,6 +294,107 @@ class _AddEditWallpaperState extends State<AddEditWallpaper> {
                             horizontal: 12, vertical: 12),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
+                                  // height: 150,
+                                  // width: 150,
+                                  // fit: BoxFit.cover,
+                                ),
+                              ],
+                            ),
+                          ),
+                          // Spacer(),
+                          SizedBox(height: 25),
+                        ],
+                        GestureDetector(
+                          behavior: HitTestBehavior.translucent,
+                          onTap: () async {
+                            final ImagePicker picker = ImagePicker();
+                            image = await picker.pickImage(
+                              source: ImageSource.gallery,
+                              maxWidth: 400,
+                            );
+                            setState(() {});
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.add,
+                                color: Colors.black,
+                                size: 20,
+                              ),
+                              SizedBox(
+                                width: 4,
+                              ),
+                              CustomText(
+                                text: 'Upload Wallpaper',
+                                fontSize: 15,
+                                color: Colors.black,
+                              ),
+                            ],
+                          ),
+                        ),
+                        // SizedBox(height: 15),
+                      ],
+                    ),
+                  ),
+                  Spacer(),
+                  if (wallpaperCategories.isNotEmpty) ...[
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CustomText(
+                          text: 'Free Category',
+                          fontSize: 15,
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: DropdownButton<String>(
+                                value: selectedFreeCategories,
+                                isExpanded: true,
+                                icon: Icon(
+                                  Icons.keyboard_arrow_down_rounded,
+                                  color: Colors.black,
+                                ),
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 14,
+                                ),
+                                borderRadius: BorderRadius.circular(
+                                  15,
+                                ),
+                                items: wallpaperCategories
+                                    .map<DropdownMenuItem<String>>(
+                                      (e) => DropdownMenuItem<String>(
+                                        value: e,
+                                        child: CustomText(
+                                          text: e,
+                                          fontSize: 14,
+                                          // color: Colors.black,
+                                        ),
+                                      ),
+                                    )
+                                    .toList(),
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectedFreeCategories = value!;
+                                    validationForDropDown();
+                                    // log(selectedFreeCategories.toString());
+                                  });
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: MediaQuery.sizeOf(context).height * 0.04),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CustomText(
+                          text: 'Paid Category',
+                          fontSize: 15,
                         ),
                       ),
                     ),
@@ -311,6 +435,47 @@ class _AddEditWallpaperState extends State<AddEditWallpaper> {
                           labelText: "Price",
                           hintText: "51.00",
                           border: OutlineInputBorder(),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: DropdownButton<String>(
+                                value: selectedPaidCategories,
+                                isExpanded: true,
+                                icon: Icon(
+                                  Icons.keyboard_arrow_down_rounded,
+                                  color: Colors.black,
+                                ),
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 14,
+                                ),
+                                borderRadius: BorderRadius.circular(
+                                  15,
+                                ),
+                                items: wallpaperCategories
+                                    .map<DropdownMenuItem<String>>(
+                                      (e) => DropdownMenuItem<String>(
+                                        value: e,
+                                        child: CustomText(
+                                          text: e,
+                                          fontSize: 14,
+                                          // color: Colors.black,
+                                        ),
+                                      ),
+                                    )
+                                    .toList(),
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectedPaidCategories = value!;
+                                    validationForDropDown(
+                                      changInPaidWallpaper: true,
+                                    );
+                                    // log(selectedPaidCategories.toString());
+                                  });
+                                },
+                              ),
+                            ),
+                          ],
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
