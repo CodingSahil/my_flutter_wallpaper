@@ -41,10 +41,10 @@ class _FullScreenState extends State<FullScreen> {
   void initState() {
     isFavourite = widget.isInWishlist;
     defaultCacheManager = DefaultCacheManager();
-    log(
-      widget.imaagepath,
-      name: 'image Path => ',
-    );
+    // log(
+    //   widget.imaagepath,
+    //   name: 'image Path => ',
+    // );
     super.initState();
   }
 
@@ -106,14 +106,14 @@ class _FullScreenState extends State<FullScreen> {
                             });
                             try {
                               final imagePath =
-                                  '${Directory.systemTemp.path}/image.jpg';
+                                  '${Directory.systemTemp.path}/wall_wonders_wallpaper.jpg';
                               await Dio()
                                   .download(widget.imaagepath, imagePath);
                               await Gal.putImage(imagePath);
-                              log(
-                                imagePath.toString(),
-                                name: 'result => ',
-                              );
+                              // log(
+                              //   imagePath.toString(),
+                              //   name: 'result => ',
+                              // );
                             } catch (e) {
                               log('error => $e');
                             }
@@ -160,42 +160,34 @@ class _FullScreenState extends State<FullScreen> {
                         child: GestureDetector(
                           behavior: HitTestBehavior.translucent,
                           onTap: () async {
-                            setState(() {
-                              loader = true;
-                            });
-                            var dummyFile =
-                                await defaultCacheManager.downloadFile(
-                              widget.imaagepath.toString(),
-                              key: 'DownloadedImage',
-                            );
-                            file = await defaultCacheManager.putFile(
-                              dummyFile.originalUrl,
-                              Uint8List(
-                                dummyFile.file.lengthSync(),
-                              ),
-                              key: 'DownloadedImage',
-                            );
-                            log(file?.path.toString() ?? '', name: 'path => ');
-                            final FileInfo? localFile =
-                                await defaultCacheManager.getFileFromCache(
-                              'DownloadedImage',
-                            );
-                            log(
-                              localFile?.file.path.toString() ?? '',
-                              name: 'localFile path => ',
-                            );
-
-                            setState(() {
-                              loader = false;
-                            });
-
                             /// todo payment page @RahulMistry
-                            return;
-                            Navigator.pushNamed(
-                              context,
-                              AppRoutes.makePayment,
-                              arguments: 'Make a Payment !!',
-                            );
+                            // Navigator.pushNamed(
+                            //   context,
+                            //   AppRoutes.makePayment,
+                            //   arguments: 'Make a Payment !!',
+                            // );
+
+                            /// todo @RahulMistry code of saving wallpaper to gallery
+                            // setState(() {
+                            //   loader = true;
+                            // });
+                            // try {
+                            //   final imagePath =
+                            //       '${Directory.systemTemp.path}/wall_wonders_paid_wallpaper.jpg';
+                            //   await Dio()
+                            //       .download(widget.imaagepath, imagePath);
+                            //   await Gal.putImage(imagePath);
+                            //   log(
+                            //     imagePath.toString(),
+                            //     name: 'result => ',
+                            //   );
+                            // } catch (e) {
+                            //   log('error => $e');
+                            // }
+                            //
+                            // setState(() {
+                            //   loader = false;
+                            // });
                           },
                           child: Container(
                             decoration: BoxDecoration(
@@ -264,7 +256,6 @@ class _FullScreenState extends State<FullScreen> {
                           ],
                           text: 'Great picture',
                         );
-                        log('message');
                         if (result.status == ShareResultStatus.success) {
                           print('Thank you for sharing the picture!');
                         }
@@ -276,7 +267,6 @@ class _FullScreenState extends State<FullScreen> {
                           file.path,
                         );
                         defaultCacheManager.emptyCache();
-                        log('File Removed');
                       },
                       child: Icon(
                         Icons.share,

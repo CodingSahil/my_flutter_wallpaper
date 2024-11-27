@@ -31,7 +31,6 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    log('SplashScreen');
     return Scaffold(
       body: Center(
         child: Text(

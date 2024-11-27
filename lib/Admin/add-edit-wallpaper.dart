@@ -61,7 +61,7 @@ class _AddEditWallpaperState extends State<AddEditWallpaper> {
         }
       }
     }
-    log(wallpaperCategories.length.toString());
+    // log(wallpaperCategories.length.toString());
     loaderSample();
     super.initState();
   }
@@ -245,7 +245,7 @@ class _AddEditWallpaperState extends State<AddEditWallpaper> {
                                   setState(() {
                                     selectedFreeCategories = value!;
                                     validationForDropDown();
-                                    log(selectedFreeCategories.toString());
+                                    // log(selectedFreeCategories.toString());
                                   });
                                 },
                               ),
@@ -297,7 +297,7 @@ class _AddEditWallpaperState extends State<AddEditWallpaper> {
                                     validationForDropDown(
                                       changInPaidWallpaper: true,
                                     );
-                                    log(selectedPaidCategories.toString());
+                                    // log(selectedPaidCategories.toString());
                                   });
                                 },
                               ),
